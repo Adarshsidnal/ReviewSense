@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReviewSense</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to ReviewSense!</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Scrape Amazon Reviews</h2>
+            <form id="scrape-form">
+                <label for="product_url">Enter Product URL:</label>
+                <input type="text" id="product_url" name="product_url" placeholder="Enter Amazon Product URL">
+                <button type="button" id="scrape-button">Scrape Reviews</button>
+            </form>
+
+            <div id="reviews-container">
+                <!-- Scraped reviews will be displayed here -->
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
