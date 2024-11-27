@@ -42,8 +42,8 @@ def process_reviews(dataframe):
     grouped_data = dataframe.groupby("Product Name")
     for product, group in grouped_data:
         # Separate positive and negative reviews
-        positive_reviews = group[group["Sentiment"] == "positive"]["Review"].tolist()
-        negative_reviews = group[group["Sentiment"] == "negative"]["Review"].tolist()
+        positive_reviews = group[group["sentiment"] == "positive"]["Review"].tolist()
+        negative_reviews = group[group["sentiment"] == "negative"]["Review"].tolist()
 
         # Generate summaries
         positive_summary = summarize_reviews(positive_reviews)
