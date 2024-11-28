@@ -1,6 +1,39 @@
+//document.getElementById('scrape-button').addEventListener('click', function () {
+//    // Simulate fetching data (replace with actual scraping logic)
+//    const sentimentData = { positive: 70, negative: 30 };
+//    const ratingData = [50, 30, 10, 5, 5]; // Example rating percentages
+//
+//    // Create sentiment chart
+//    new Chart(document.getElementById('sentiment-chart'), {
+//        type: 'pie',
+//        data: {
+//            labels: ['Positive', 'Negative'],
+//            datasets: [{
+//                data: [sentimentData.positive, sentimentData.negative],
+//                backgroundColor: ['#4CAF50', '#F44336']
+//            }]
+//        }
+//    });
+//
+//    // Create rating chart
+//    new Chart(document.getElementById('rating-chart'), {
+//        type: 'pie',
+//        data: {
+//            labels: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'],
+//            datasets: [{
+//                data: ratingData,
+//                backgroundColor: ['#FFD700', '#C0C0C0', '#CD7F32', '#808080', '#FF4500']
+//            }]
+//        }
+//    });
+//});
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const scrapeButton = document.getElementById('scrape-button');
     const reviewsContainer = document.getElementById('reviews-container');
+    const sentimentDiv=document.getElementById('sentiment');
+    const ratingsDiv=document.getElementById('ratings');
 
     scrapeButton.addEventListener('click', async () => {
         const productUrl = document.getElementById('product_url').value.trim();
@@ -23,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({
                     url: productUrl,
-                    max_reviews: 100, // Default number of reviews to scrape
+                    max_reviews: 10, // Default number of reviews to scrape
                 }),
             });
 
@@ -61,6 +94,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const analyzedReviews = analyzeResult.data;
             console.log(analyzedReviews);
+
+            reviewsContainer.innerHTML = '<p>Generating review analysis...</p>';
+
+            const reviewAnalysisResponse = await fetch('/analyze_reviews', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reviews: analyzedReviews })
+            });
+
+            const reviewAnalysisResult = await reviewAnalysisResponse.json();
+
+            if (!reviewAnalysisResult.success) {
+                reviewsContainer.innerHTML = `<p>Error during review analysis: ${reviewAnalysisResult.message}</p>`;
+                return;
+            }
+
+            const { sentiment_counts, rating_counts } = reviewAnalysisResult.data;
+
+            renderPieChart(
+                'sentimentChart',
+                ['Positive', 'Negative'],
+                [sentiment_counts.positive, sentiment_counts.negative],
+                ['#4CAF50', '#F44336']
+            );
+
+            // Rating Pie Chart
+            renderPieChart(
+                'ratingChart',
+                ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'],
+                [
+                    rating_counts['5 stars'] || 0,
+                    rating_counts['4 stars'] || 0,
+                    rating_counts['3 stars'] || 0,
+                    rating_counts['2 stars'] || 0,
+                    rating_counts['1 star'] || 0
+                ],
+                ['#FFD700', '#C0C0C0', '#CD7F32', '#808080', '#FF4500']
+            );
 
             // Step 3: Summarize reviews
             reviewsContainer.innerHTML = '<p>Summarizing reviews...</p>';
@@ -115,3 +186,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
+function renderPieChart(chartId, labels, data, backgroundColors) {
+    const ctx = document.getElementById(chartId).getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: backgroundColors
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+
+
+
