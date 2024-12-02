@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({
                     url: productUrl,
-                    max_reviews: 10, // Default number of reviews to scrape
+                    max_reviews: 100, // Default number of reviews to scrape
                 }),
             });
 
@@ -112,13 +112,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const { sentiment_counts, rating_counts } = reviewAnalysisResult.data;
 
+            const sentimentDiv = document.getElementById('sentiment');
+if (!sentimentDiv.querySelector('h3')) {
+    const sentimentHeading = document.createElement('h3');
+    sentimentHeading.textContent = 'Sentiment Analysis';
+    sentimentHeading.style.textAlign = 'top'; // Optional: Center-align heading
+    sentimentDiv.prepend(sentimentHeading); // Add heading above chart
+}
+
             renderPieChart(
                 'sentimentChart',
                 ['Positive', 'Negative'],
                 [sentiment_counts.positive, sentiment_counts.negative],
-                ['#4CAF50', '#F44336']
+                ['#4CAF50', '#F44336'],
+                'Sentiment Analysis'
             );
 
+            const ratingDiv = document.getElementById('ratings');
+            if (!ratingDiv.querySelector('h3')) {
+                const ratingHeading = document.createElement('h3');
+                ratingHeading.textContent = 'Rating Analysis';
+                ratingHeading.style.textAlign = 'center'; // Optional: Center-align heading
+                ratingDiv.prepend(ratingHeading); // Add heading above chart
+            }
             // Rating Pie Chart
             renderPieChart(
                 'ratingChart',
@@ -130,7 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     rating_counts['2 stars'] || 0,
                     rating_counts['1 star'] || 0
                 ],
-                ['#FFD700', '#C0C0C0', '#CD7F32', '#808080', '#FF4500']
+                ['#FFD700', '#C0C0C0', '#CD7F32', '#808080', '#FF4500'],
+                'Rating Analysis'
             );
 
             // Step 3: Summarize reviews
@@ -156,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(summaries[0]);
 
             // Display summaries
-            let summaryHtml = '<h3>Review Summaries:</h3>';
+            let summaryHtml = '<h3>Review Summaries</h3>';
 
             if (summaries.length > 0) {
                 const firstSummary = summaries[0]; // Access the first object in the array

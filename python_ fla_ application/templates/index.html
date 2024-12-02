@@ -24,17 +24,18 @@
                 <!-- Scraped reviews will be displayed here -->
             </div>
         </section>
-
-        <section>
+        <div class="chart-container">
             <div id="sentiment">
-            <canvas id="sentimentChart" width="400" height="400"></canvas>
+                <!-- <p>Sentiment Analysis</p> -->
+                <canvas id="sentimentChart" width="1086" height="1086"></canvas>
             </div>
-        </section>
-
-        <section>
-            <div id="ratings"></div>
-            <canvas id="ratingChart" width="400" height="400"></canvas>
-        </section>
+        
+            <div id="ratings">
+                <!-- <p>Rating Analysis</p> -->
+                <canvas id="ratingChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+        
     </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/test.js') }}"></script>

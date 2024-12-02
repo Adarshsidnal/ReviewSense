@@ -1,10 +1,13 @@
 /* General Styles */
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: "Lora", serif;
+    font-weight: 400;
+    font-size: large;
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
+    background-color: #E2EFDE;
     color: #333;
 }
 
@@ -87,7 +90,7 @@ button:hover {
 }
 
 /* Chart Section - Side by Side */
-#sentiment, #ratings {
+/* #sentiment, #ratings {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -104,7 +107,40 @@ canvas {
     margin-top: 1rem;
     max-width: 100%;
     height: auto;
+} */
+
+
+.chart-container {
+    display: flex; /* Set flexbox to align items side by side */
+    gap: 2rem; /* Space between the charts */
+    justify-content: center; /* Center both charts in the container */
+    align-items: center; /* Vertically align the charts */
 }
+
+#sentiment, #ratings {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    flex: 1; /* Equal spacing for both containers */
+}
+
+h3 {
+    text-align: center; /* Center-align the heading */
+    margin: 0 0 10px 0; /* Space below the heading */
+    padding-top: 10px; /* Optional padding if needed */
+}
+
+canvas {
+    width: 450px !important; /* Fixed width for both pie charts */
+    height: 450px !important;
+    margin: 0; /* Remove any unnecessary margins */
+}
+
+
+
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
